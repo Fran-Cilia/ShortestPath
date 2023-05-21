@@ -1,25 +1,28 @@
-const node = {
-    row, 
-    col,
-    visited,
-    dist,
-};
+// const node = {
+//     row, 
+//     col,
+//     visited,
+//     dist,
+// };
 
-function dijkstra(grid, startNode, endNode) {
-    // Edge Case: no start node or end end node or they interlap
+//Dijkstra's algorithm return the order in which we found the shortesth path
+export function dijkstra(grid, startNode, endNode) {
+    const visitedNodes = [];
+
     if (!startNode || !endNode || startNode === endNode) {
         return false;
     }
 
-    nodes[startNode].dist = 0;
-    const unvisitedNodes = nodes.slice()
+    startNode.distance = 0;
+    const unvisitedNodes = getAllNodes(grid);
 
     while (!!unvisitedNodes.length) {
         sortNodes(unvisitedNodes);
-        const closestNode = unvisitedNodes.unshift();
+        const closestNode = unvisitedNodes.shift();
 
         closestNode.visited = true;
-        if (closestNode === endNode) return 'sucess!';
+        visitedNodes.push(closestNode);
+        if (closestNode === endNode) return visitedNodes;
         updateNeighbors(closestNode, grid);
     }
 }
@@ -44,5 +47,15 @@ function getNeighbors (node, grid) {
     if (col > 0) neighbors.push(grid[row][col - 1])
     if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1])
 
-    return neighbors
+    return neighbors.filter(neighbor => !neighbor.visited);
+}
+
+function getAllNodes(grid) {
+    const nodes = [];
+    for (const row of grid) {
+        for (const node of row) {
+            nodes.push(node);
+        }
+    }
+    return nodes;
 }

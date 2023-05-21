@@ -9,11 +9,13 @@ export default class Node extends Component {
     }
 
     render() {
-        const {isEnd, isStart} = this.props;
+        const {isEnd, isStart, visited} = this.props;
         const extraClassName = isEnd 
             ? 'node-end'
             : isStart
             ? 'node-start'
+            : visited
+            ? 'node-visited'
             : '';
         return <div className={`node ${extraClassName}`}></div>
     }
