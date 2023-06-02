@@ -9,20 +9,18 @@ export default class Node extends Component {
     }
 
     render() {
-        const {isEnd, isStart, visited} = this.props;
+        const {isEnd, isStart, visited, shortestPath} = this.props;
         const extraClassName = isEnd 
             ? 'node-end'
             : isStart
             ? 'node-start'
             : visited
             ? 'node-visited'
+            : shortestPath
+            ? 'node-shortest'
             : '';
         return <div className={`node ${extraClassName}`}></div>
     }
 
 }
 
-export const DEFAULT_NODE = {
-    row: 0,
-    col: 0,
-}

@@ -3,9 +3,9 @@ import Node from './Node/Node';
 import './Visualizer.css';
 import {dijkstra, getNodesInShortestPath} from '../Algorithms/dijkstra';
 
-const START_NODE_ROW = 10;
+const START_NODE_ROW = 8;
 const START_NODE_COL = 15;
-const END_NODE_ROW = 10;
+const END_NODE_ROW = 12;
 const END_NODE_COL = 35;
 
 export default class Visualizer extends Component {
@@ -21,27 +21,48 @@ export default class Visualizer extends Component {
         this.setState({grid});
     }
 
-    animateDijkstra(visitedNodes) {
+    animateDijkstra(visitedNodes, nodesInShortestPath) {
         for (let i = 0; i < visitedNodes.length; i++) {
             setTimeout(() => {
                 const node = visitedNodes[i];
                 const newGrid = this.state.grid.slice();
                 const newNode = {
                     ...node, 
-                    visited: true,
+                    animate: true,
                 };
                 newGrid[node.row][node.col] = newNode;
                 this.setState({grid: newGrid});
             }, 30 * i);
         }
+
+        setTimeout(() => {
+            this.animateShortestPath(nodesInShortestPath);
+        }, 30 * visitedNodes.length);   
     }
+
+    animateShortestPath(nodesInShortestPath) {
+        for (let i = 0; i < nodesInShortestPath.length; i++) {
+            setTimeout(() => {
+                const node = nodesInShortestPath[i];
+                const newGrid = this.state.grid.slice();
+                const newNode = {
+                    ...node,
+                    shortestPath: true,
+                };
+                newGrid[node.row][node.col] = newNode;
+                this.setState({grid: newGrid});
+            }, 30 * i);
+    }
+}
 
     visualizeDijkstra() {
         const {grid} = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const endNode = grid[END_NODE_ROW][END_NODE_COL];
         const visitedNodes = dijkstra(grid, startNode, endNode);
-        this.animateDijkstra(visitedNodes);
+        const nodesInShortestPath = getNodesInShortestPath(startNode, endNode);
+        console.log(nodesInShortestPath)
+        this.animateDijkstra(visitedNodes, nodesInShortestPath);
     }
 
     render() {
@@ -49,7 +70,7 @@ export default class Visualizer extends Component {
 
         return (
             <>
-                <button onClick={() => this.visualizeDijkstra()}>
+                <button className='animate-button' onClick={() => this.visualizeDijkstra()}>
                     Visualize Dijkstra
                 </button>
     
@@ -58,14 +79,15 @@ export default class Visualizer extends Component {
                         return (
                             <div key={rowIdx}>
                                 {row.map((node, nodeIdx) => {
-                                    const {isEnd, isStart, visited} = node;
+                                    const {isEnd, isStart, animate, shortestPath} = node;
                                     return (
                                         //rendering node
                                         <Node
                                             key = {nodeIdx}
                                             isStart = {isStart}
                                             isEnd = {isEnd}
-                                            visited = {visited}></Node>
+                                            visited = {animate}
+                                            shortestPath = {shortestPath}></Node>
                                     );
                                 })}
                         </div>
@@ -100,16 +122,8 @@ const createNode = (col, row) => {
         visited: false,
         isWall: false,
         prevNode: null,
+        animate: false,
+        shortestPath: false,
     };
 };
 
-// const getNewGridWithWallToggled = (grid, row, col) => {
-//     const newGrid = grid.slice();
-//     const node = newGrid[row][col];
-//     const newNode = {
-//         ...node,
-//         isWall: !node.iswall,
-//     };
-//     newGrid[row][col] = newNode;
-//     return newGrid;
-// };

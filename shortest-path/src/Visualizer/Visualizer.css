@@ -1,3 +1,25 @@
 .grid {
-    margin: 500px 0 0;
+    margin: 100px 0 0;
+}
+
+.animate-button {
+    margin-top: 100px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+    
+.animate-button:hover {
+background-color: #45a049;
+}
+
+.animate-button:focus {
+outline: none;
 }

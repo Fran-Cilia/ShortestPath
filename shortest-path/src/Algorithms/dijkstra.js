@@ -23,7 +23,7 @@ export function dijkstra(grid, startNode, endNode) {
 
         const closestNode = unvisitedNodes.shift();
 
-        //closestNode.visited = true;
+        closestNode.visited = true;
         visitedNodes.push(closestNode);
         if (closestNode === endNode) return visitedNodes;
         updateNeighbors(closestNode, grid);
@@ -62,4 +62,14 @@ function getAllNodes(grid) {
         }
     }
     return nodes;
+}
+
+export function getNodesInShortestPath(startNode, endNode) {
+    const nodesInShortestPath = [];
+    let currNode = endNode;
+    while (!currNode.isStart) {
+        nodesInShortestPath.unshift(currNode);
+        currNode = currNode.prevNode;
+    }
+    return nodesInShortestPath;
 }
